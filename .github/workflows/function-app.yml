@@ -25,6 +25,12 @@ jobs:
     - name: Install dependencies
       run: dotnet restore ${{ env.AZURE_FUNCTIONAPP_PATH }}
 
+    - name: Unit testing
+      run: dotnet test --configuration Release --logger "console;verbosity=detailed"
+      env:
+        AzureSearchAdminApiKey: ${{ secrets.AZURESEARCHADMINAPIKEY }}
+        GitHubToken: ${{ secrets.GITHUBTOKEN }}
+
     - name: Publish
       run: dotnet publish ${{ env.AZURE_FUNCTIONAPP_PATH }} --configuration Release --no-restore --output ${{ env.OUTPUT_PATH }}
 

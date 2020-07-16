@@ -366,3 +366,4 @@ FodyWeavers.xsd
 # Azure Functions localsettings file
 local.settings.json
 .idea/
+appsettings.local.json
