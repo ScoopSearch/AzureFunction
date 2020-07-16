@@ -4,7 +4,7 @@ on: push
 env:
   OUTPUT_PATH: ${{ github.workspace }}/output
   AZURE_FUNCTIONAPP_NAME: ScoopSearch.Functions
-  AZURE_FUNCTIONAPP_PATH: ${{ github.workspace }}/src/
+  SRC_PATH: ${{ github.workspace }}/src/
   # AZURE_FUNCTIONAPP_PUBLISH_PROFILE: '' # Secret in the repository
   DOTNET_VERSION: '3.1.100'
 
@@ -23,16 +23,16 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
     - name: Install dependencies
-      run: dotnet restore ${{ env.AZURE_FUNCTIONAPP_PATH }}
+      run: dotnet restore ${{ env.SRC_PATH }}
 
     - name: Unit testing
-      run: dotnet test --configuration Release --logger "console;verbosity=detailed"
+      run: dotnet test ${{ env.SRC_PATH }} --configuration Release --logger "console;verbosity=detailed"
       env:
         AzureSearchAdminApiKey: ${{ secrets.AZURESEARCHADMINAPIKEY }}
         GitHubToken: ${{ secrets.GITHUBTOKEN }}
 
     - name: Publish
-      run: dotnet publish ${{ env.AZURE_FUNCTIONAPP_PATH }} --configuration Release --no-restore --output ${{ env.OUTPUT_PATH }}
+      run: dotnet publish ${{ env.SRC_PATH }} --configuration Release --no-restore --output ${{ env.OUTPUT_PATH }}
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
